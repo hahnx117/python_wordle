@@ -98,7 +98,8 @@ with open('wordlist.txt') as f:
 
 while i <= 6:
 
-    # best_guess()
+    if i == 1:
+        print(f'You should try {random.choice(list(full_word_dict.keys()))}.')
 
     player_guess = input(f'Guess {i}: ').lower()
     wordle_response = input('Wordle response: (N)ot in word, (Y)ellow letter, (G)reen letter, e.g. NGYNN: ').upper()
