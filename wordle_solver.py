@@ -43,9 +43,9 @@ def grey_check(player_guess, wordle_response, full_word_dict):
     for j in range(len(player_guess)):
         if wordle_response[j].upper() == 'N':
             for key in full_word_dict:
-                if (player_guess[j] in key) and (player_guess.count(player_guess[j]) >= 2):
+                if (player_guess[j] in key) and (player_guess.count(player_guess[j]) >= 2) and (full_word_dict[key] == True):
                     full_word_dict[key] = True
-                elif player_guess[j] in key:
+                elif player_guess[j] in key and player_guess.count(player_guess[j]) == 1:
                     full_word_dict[key] = False
                 #else:
                 #    print("Hard to handle double letters.")
@@ -62,10 +62,10 @@ def whats_left():
             if len(set(key)) == 5:
                 unique_list.append(key)
     
-    print(f'There are {len(possible_list)} possibilities.')
+    print(f'\nThere are {len(possible_list)} possibilities.')
 
     if len(possible_list) == 1:
-        print(f'The answer is {possible_list[0]}. Nice!')
+        print(f'The answer is {possible_list[0]}. Nice!\n')
         sys.exit(0)
     elif len(possible_list) == 0:
         print(f"There's been a problem. Check out the dict.")
@@ -73,12 +73,12 @@ def whats_left():
         pprint(full_word_dict)
     elif len(possible_list) <= 100:
         print(possible_list)
-        print(f'The unique words are:')
+        print(f'\nThe unique words are:')
         print(unique_list)
-        print(f'You should try {random.choice(unique_list)}')
+        print(f'\nYou should try {random.choice(unique_list)}')
     else:
         print('The full list is too long to print.')
-        print(f'You should try {random.choice(unique_list)}')
+        print(f'\nYou should try {random.choice(unique_list)}')
     
 
 def best_guess():
