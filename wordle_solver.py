@@ -67,6 +67,8 @@ def whats_left():
 
     if len(possible_list) == 1:
         print(f'The answer is {possible_list[0]}. Nice!\n')
+        with open('answer_list.txt', 'a') as f:
+            f.write(f'{possible_list[0]}\n')
         sys.exit(0)
     elif len(possible_list) == 0:
         print(f"There's been a problem. Check out the dict.")
@@ -127,14 +129,17 @@ def best_guess():
 # Play code
 i = 1
 full_word_dict = {}
-with open('wordlist.txt') as f:
+test_word = ''
+with open('wordlist.txt', 'r') as f:
     for word in f:
         full_word_dict[word.strip('\n')] = True
 
 while i <= 6:
 
     if i == 1:
-        print(f'You should try {random.choice(list(full_word_dict.keys()))}.')
+        while len(set(test_word)) != 5:
+            test_word = random.choice(list(full_word_dict.keys()))
+        print(f'You should try {test_word}.')
         # best_guess()
     else:
         best_guess()
