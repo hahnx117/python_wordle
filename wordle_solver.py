@@ -18,7 +18,7 @@ dict = {
 """
 
 import sys
-from random import randrange
+import random
 
 def green_check(player_guess, wordle_response, full_word_dict):
     """Mark words FALSE where green characters not in the correct spot."""
@@ -43,8 +43,12 @@ def grey_check(player_guess, wordle_response, full_word_dict):
     for j in range(len(player_guess)):
         if wordle_response[j].upper() == 'N':
             for key in full_word_dict:
-                if player_guess[j] in key:
+                if (player_guess[j] in key) and (player_guess.count(player_guess[j]) >= 2):
+                    full_word_dict[key] = True
+                elif player_guess[j] in key:
                     full_word_dict[key] = False
+                #else:
+                #    print("Hard to handle double letters.")
 
 
 def whats_left():
@@ -63,15 +67,18 @@ def whats_left():
     if len(possible_list) == 1:
         print(f'The answer is {possible_list[0]}. Nice!')
         sys.exit(0)
+    elif len(possible_list) == 0:
+        print(f"There's been a problem. Check out the dict.")
+        from pprint import pprint
+        pprint(full_word_dict)
     elif len(possible_list) <= 100:
         print(possible_list)
         print(f'The unique words are:')
         print(unique_list)
+        print(f'You should try {random.choice(unique_list)}')
     else:
         print('The full list is too long to print.')
-
-        print(f'The unique words are:')
-        print(unique_list)
+        print(f'You should try {random.choice(unique_list)}')
     
 
 def best_guess():
@@ -98,7 +105,7 @@ while i <= 6:
     
     if 'G' in wordle_response:
         green_check(player_guess, wordle_response, full_word_dict)
-    
+        
     if 'Y' in wordle_response:
         yellow_check(player_guess, wordle_response, full_word_dict)
 
