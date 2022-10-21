@@ -19,6 +19,7 @@ dict = {
 
 import sys
 import random
+import string
 
 def green_check(player_guess, wordle_response, full_word_dict):
     """Mark words FALSE where green characters not in the correct spot."""
@@ -73,21 +74,55 @@ def whats_left():
         pprint(full_word_dict)
     elif len(possible_list) <= 100:
         print(possible_list)
-        print(f'\nThe unique words are:')
-        print(unique_list)
-        print(f'\nYou should try {random.choice(unique_list)}')
+        if unique_list:
+            print(f'\nThe unique words are:')
+            print(unique_list)
+            print(f'\nYou should try {random.choice(unique_list)}')
+        else:
+            print(f'\nYou should try {random.choice(possible_list)}')
     else:
         print('The full list is too long to print.')
         print(f'\nYou should try {random.choice(unique_list)}')
     
 
 def best_guess():
-    """Take the remaining words and return the word that yields the lowest remaining possibilities."""
+    """Take the remaining words and return the word that yields the lowest remaining possibilities.
+    Score count how many times the letters of the alphabet occur.
+    e.g. if a occurs 5 times, 'a': 5.
+    Then score the remaining words by adding the letter scores."""
     remainder_list = []
+    score_list = []
+    alphabet_dict = {}
 
+    # create list of word remainders
     for key in full_word_dict:
         if full_word_dict[key] == True:
             remainder_list.append(key)
+    
+    # create dictionary of alphabet characters
+    for letter in list(string.ascii_lowercase):
+        alphabet_dict[letter] = 0
+    
+    #get frequency of letters
+    for word in remainder_list:
+        if len(set(word)) == 5:
+            for letter in list(word):
+                alphabet_dict[letter] += 1
+        
+    # score words in tuples
+    for word in remainder_list:
+        if len(set(word)) == 5:
+            word_score = 0
+            for letter in list(word):
+                word_score += alphabet_dict[letter]
+            score_tuple = (word, word_score)
+            score_list.append(score_tuple)
+        # word_score = 0
+    
+    if score_list:
+        print(score_list[-1])
+    else:
+        print("There are only words with repeating letters.")
 
 # Play code
 i = 1
@@ -100,7 +135,10 @@ while i <= 6:
 
     if i == 1:
         print(f'You should try {random.choice(list(full_word_dict.keys()))}.')
-
+        # best_guess()
+    else:
+        best_guess()
+    
     player_guess = input(f'Guess {i}: ').lower()
     wordle_response = input('Wordle response: (N)ot in word, (Y)ellow letter, (G)reen letter, e.g. NGYNN: ').upper()
     
